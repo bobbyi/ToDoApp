@@ -18,14 +18,21 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         editText = (EditText)findViewById(R.id.edit_message);
 
+        createEnterKeyListener();
+    }
+
+    private void createEnterKeyListener() {
         editText.setOnKeyListener(new OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // If the event is a key-down event on the "enter" button
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                if (enterWasPressed(keyCode, event)) {
                     addItem();
                     return true;
                 }
                 return false;
+            }
+
+            private boolean enterWasPressed(int keyCode, KeyEvent event) {
+                return (event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER);
             }
         });
     }
