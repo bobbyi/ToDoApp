@@ -1,8 +1,11 @@
 package com.example.todoapp;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -18,5 +21,10 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
-    
+
+    public void sendMessage(View view) {
+    	EditText editText = (EditText) findViewById(R.id.edit_message);
+    	String text = editText.getText().toString();
+    	Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+    }
 }
