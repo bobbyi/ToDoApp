@@ -21,10 +21,14 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
+    
+    public void toast(String message) {
+    	Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
 
-    public void sendMessage(View view) {
-    	EditText editText = (EditText) findViewById(R.id.edit_message);
+    public void addItem(View view) {
+    	EditText editText = (EditText)findViewById(R.id.edit_message);
     	String text = editText.getText().toString();
-    	Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+    	toast(text);
     }
 }
