@@ -50,7 +50,10 @@ public class MainActivity extends Activity {
 
     public void addItem() {
         String text = editText.getText().toString();
-        toast(text);
+        text = text.replace('\n', ' ').trim();
+        if (!text.equals("")) {
+            toast(text);
+        }
         editText.setText("");
     }
  
