@@ -68,4 +68,9 @@ public class MainActivity extends Activity {
     public void copyText(View view) {
         clipboardManager.setText("Text\nwith\nnewlines");
     }
+
+    public void pasteText(View view) {
+        CharSequence text = clipboardManager.getText();
+        editText.setText(text);
+    }
 }
