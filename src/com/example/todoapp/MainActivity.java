@@ -8,11 +8,11 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnKeyListener;
 import android.widget.EditText;
-import android.widget.Toast;
 
 @SuppressWarnings("deprecation")
 public class MainActivity extends Activity {
     private EditText editText;
+    private EditText displayText;
     private ClipboardManager clipboardManager;
 
     @Override
@@ -20,6 +20,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         editText = (EditText)findViewById(R.id.edit_message);
+        displayText = (EditText)findViewById(R.id.display_message);
         clipboardManager = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE); 
 
         createEnterKeyListener();
@@ -47,20 +48,20 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
-    
-    public void toast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
+ 
     public void addItem() {
         String text = editText.getText().toString();
         text = text.replace('\n', ' ').trim();
         if (!text.equals("")) {
-            toast(text);
+            showText(text);
         }
         editText.setText("");
     }
  
+    private void showText(String text) {
+        displayText.setText(text);
+    }
+
     public void onButtonClick(View view) {
         addItem();
     }
