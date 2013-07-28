@@ -7,22 +7,26 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnKeyListener;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 
 @SuppressWarnings("deprecation")
 public class MainActivity extends Activity {
     private EditText editText;
-    private EditText displayText;
+    private ListView listView;
+    ArrayAdapter<String> listViewAdapter;
     private ClipboardManager clipboardManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        editText = (EditText)findViewById(R.id.edit_message);
-        displayText = (EditText)findViewById(R.id.display_message);
         clipboardManager = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE); 
-
+        editText = (EditText)findViewById(R.id.edit_text);
+        listView = (ListView)findViewById(R.id.items);
+        listViewAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+        listView.setAdapter(listViewAdapter);
         createEnterKeyListener();
     }
 
@@ -49,21 +53,17 @@ public class MainActivity extends Activity {
         return true;
     }
  
-    public void addItem() {
+    public void addItem(View view) {
         String text = editText.getText().toString();
         text = text.replace('\n', ' ').trim();
         if (!text.equals("")) {
-            showText(text);
+            listViewAdapter.add(text);
         }
         editText.setText("");
     }
- 
-    private void showText(String text) {
-        displayText.setText(text);
-    }
-
-    public void onButtonClick(View view) {
-        addItem();
+    
+    public void addItem() {
+        addItem(null);
     }
 
     public void copyText(View view) {

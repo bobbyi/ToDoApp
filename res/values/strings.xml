@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">My First App</string>
-    <string name="edit_message">Enter a message</string>
-    <string name="display_message">Stuff goes here</string>
-    <string name="button_send">Send</string>
+    <string name="app_name">To Do App</string>
+    <string name="edit_text">Add an item</string>
+    <string name="button_add">Add</string>
     <string name="button_copy">Copy Text</string>
     <string name="button_past">Paste</string>
     <string name="menu_settings">Settings</string>

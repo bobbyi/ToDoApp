@@ -7,16 +7,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
-    <EditText android:id="@+id/edit_message"
+    <EditText android:id="@+id/edit_text"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/edit_message" />
+        android:hint="@string/edit_text" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_send"
-        android:onClick="onButtonClick" />
+        android:text="@string/button_add"
+        android:onClick="addItem" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,9 +28,8 @@
         android:text="@string/button_past"
         android:onClick="pasteText" />
 </LinearLayout>
-    <EditText android:id="@+id/display_message"
+    <ListView android:id="@+id/items"
         android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:hint="@string/display_message" />
+        android:layout_height="0dp" />
 </LinearLayout>
