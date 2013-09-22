@@ -3,13 +3,18 @@ package com.example.todoapp;
 import android.app.Activity;
 import android.text.ClipboardManager;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
-import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnKeyListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 @SuppressWarnings("deprecation")
 public class MainActivity extends Activity {
@@ -17,17 +22,25 @@ public class MainActivity extends Activity {
     private ListView listView;
     ArrayAdapter<String> listViewAdapter;
     private ClipboardManager clipboardManager;
+    private int selectedItemIdx;
+    private TextView selectedItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        clipboardManager = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE); 
-        editText = (EditText)findViewById(R.id.edit_text);
-        listView = (ListView)findViewById(R.id.items);
-        listViewAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-        listView.setAdapter(listViewAdapter);
+        clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        editText = (EditText) findViewById(R.id.edit_text);
+        listView = (ListView) findViewById(R.id.items);
+        setupListView();
         createEnterKeyListener();
+    }
+
+    private void setupListView() {
+        registerForContextMenu(listView);
+        listViewAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1);
+        listView.setAdapter(listViewAdapter);
     }
 
     private void createEnterKeyListener() {
@@ -41,19 +54,17 @@ public class MainActivity extends Activity {
             }
 
             private boolean enterWasPressed(int keyCode, KeyEvent event) {
-                return (event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER);
+                return (event.getAction() == KeyEvent.ACTION_DOWN)
+                        && (keyCode == KeyEvent.KEYCODE_ENTER);
             }
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
-    }
- 
     public void addItem(View view) {
+        addItem();
+    }
+
+    public void addItem() {
         String text = editText.getText().toString();
         text = text.replace('\n', ' ').trim();
         if (!text.equals("")) {
@@ -61,17 +72,36 @@ public class MainActivity extends Activity {
         }
         editText.setText("");
     }
-    
-    public void addItem() {
-        addItem(null);
-    }
 
     public void copyText(View view) {
         clipboardManager.setText("Text\nwith\nnewlines");
     }
 
-    public void pasteText(View view) {
-        CharSequence text = clipboardManager.getText();
-        editText.setText(text);
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+            ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        AdapterView.AdapterContextMenuInfo info =
+                (AdapterView.AdapterContextMenuInfo) menuInfo;
+        selectedItem = (TextView) info.targetView;
+        selectedItemIdx = info.position;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+    }
+    
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.context_menu_copy_text:
+                String text = selectedItem.getText().toString();
+                clipboardManager.setText(text);
+                return true;
+            case R.id.context_menu_delete:
+                listViewAdapter.remove(listViewAdapter.getItem(selectedItemIdx));
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 }

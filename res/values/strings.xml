@@ -4,7 +4,7 @@
     <string name="edit_text">Add an item</string>
     <string name="button_add">Add</string>
     <string name="button_copy">Copy Text</string>
-    <string name="button_past">Paste</string>
     <string name="menu_settings">Settings</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="context_menu_copy_text">Copy Text</string>
+    <string name="context_menu_delete">Delete Item</string>
 </resources>
