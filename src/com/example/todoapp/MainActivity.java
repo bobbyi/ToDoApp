@@ -17,7 +17,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 @SuppressWarnings("deprecation")
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnKeyListener
+{
     private EditText editText;
     private ListView listView;
     ArrayAdapter<String> listViewAdapter;
@@ -30,34 +31,35 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        editText = (EditText) findViewById(R.id.edit_text);
-        listView = (ListView) findViewById(R.id.items);
+        setupEditText();
         setupListView();
-        createEnterKeyListener();
     }
 
     private void setupListView() {
+        listView = (ListView) findViewById(R.id.items);
         registerForContextMenu(listView);
         listViewAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1);
         listView.setAdapter(listViewAdapter);
     }
 
-    private void createEnterKeyListener() {
-        editText.setOnKeyListener(new OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (enterWasPressed(keyCode, event)) {
-                    addItem();
-                    return true;
-                }
-                return false;
-            }
+    private void setupEditText() {
+        editText = (EditText) findViewById(R.id.edit_text);
+        editText.setOnKeyListener(this);
+    }
+ 
+    @Override
+    public boolean onKey(View view, int keyCode, KeyEvent event) {
+        if (enterWasPressed(keyCode, event)) {
+            addItem();
+            return true;
+        }
+        return false;
+    }
 
-            private boolean enterWasPressed(int keyCode, KeyEvent event) {
-                return (event.getAction() == KeyEvent.ACTION_DOWN)
-                        && (keyCode == KeyEvent.KEYCODE_ENTER);
-            }
-        });
+    private boolean enterWasPressed(int keyCode, KeyEvent event) {
+        return (event.getAction() == KeyEvent.ACTION_DOWN)
+                && (keyCode == KeyEvent.KEYCODE_ENTER);
     }
 
     public void addItem(View view) {
