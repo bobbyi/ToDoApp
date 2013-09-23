@@ -16,15 +16,28 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+class ListViewItem {
+    private String text;
+    
+    public ListViewItem(String text) {
+        this.text = text;
+    }
+    
+    @Override 
+    public String toString() {
+        return text;
+    }
+}
+
 @SuppressWarnings("deprecation")
 public class MainActivity extends Activity implements OnKeyListener
 {
     private EditText editText;
     private ListView listView;
-    ArrayAdapter<String> listViewAdapter;
+    ArrayAdapter<ListViewItem> listViewAdapter;
     private ClipboardManager clipboardManager;
     private int selectedItemIdx;
-    private TextView selectedItem;
+    private TextView selectedView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +51,7 @@ public class MainActivity extends Activity implements OnKeyListener
     private void setupListView() {
         listView = (ListView) findViewById(R.id.items);
         registerForContextMenu(listView);
-        listViewAdapter = new ArrayAdapter<String>(this,
+        listViewAdapter = new ArrayAdapter<ListViewItem>(this,
                 android.R.layout.simple_list_item_1);
         listView.setAdapter(listViewAdapter);
     }
@@ -70,7 +83,7 @@ public class MainActivity extends Activity implements OnKeyListener
         String text = editText.getText().toString();
         text = text.replace('\n', ' ').trim();
         if (!text.equals("")) {
-            listViewAdapter.add(text);
+            listViewAdapter.add(new ListViewItem(text));
         }
         editText.setText("");
     }
@@ -86,7 +99,7 @@ public class MainActivity extends Activity implements OnKeyListener
         super.onCreateContextMenu(menu, v, menuInfo);
         AdapterView.AdapterContextMenuInfo info =
                 (AdapterView.AdapterContextMenuInfo) menuInfo;
-        selectedItem = (TextView) info.targetView;
+        selectedView = (TextView) info.targetView;
         selectedItemIdx = info.position;
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.context_menu, menu);
@@ -96,7 +109,7 @@ public class MainActivity extends Activity implements OnKeyListener
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.context_menu_copy_text:
-                String text = selectedItem.getText().toString();
+                String text = selectedView.getText().toString();
                 clipboardManager.setText(text);
                 return true;
             case R.id.context_menu_delete:
