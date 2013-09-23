@@ -36,7 +36,7 @@ public class MainActivity extends Activity implements OnKeyListener
     private ListView listView;
     ArrayAdapter<ListViewItem> listViewAdapter;
     private ClipboardManager clipboardManager;
-    private int selectedItemIdx;
+    private ListViewItem selectedItem;
     private TextView selectedView;
 
     @Override
@@ -100,7 +100,7 @@ public class MainActivity extends Activity implements OnKeyListener
         AdapterView.AdapterContextMenuInfo info =
                 (AdapterView.AdapterContextMenuInfo) menuInfo;
         selectedView = (TextView) info.targetView;
-        selectedItemIdx = info.position;
+        selectedItem = listViewAdapter.getItem(info.position);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.context_menu, menu);
     }
@@ -113,7 +113,7 @@ public class MainActivity extends Activity implements OnKeyListener
                 clipboardManager.setText(text);
                 return true;
             case R.id.context_menu_delete:
-                listViewAdapter.remove(listViewAdapter.getItem(selectedItemIdx));
+                listViewAdapter.remove(selectedItem);
                 return true;
             default:
                 return super.onContextItemSelected(item);
