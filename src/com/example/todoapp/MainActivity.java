@@ -1,40 +1,26 @@
 package com.example.todoapp;
 
 import android.app.Activity;
-import android.text.ClipboardManager;
 import android.os.Bundle;
+import android.text.ClipboardManager;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-class ListViewItem {
-    private String text;
-    
-    public ListViewItem(String text) {
-        this.text = text;
-    }
-    
-    @Override 
-    public String toString() {
-        return text;
-    }
-}
 
 @SuppressWarnings("deprecation")
 public class MainActivity extends Activity implements OnKeyListener
 {
     private EditText editText;
     private ListView listView;
-    ArrayAdapter<ListViewItem> listViewAdapter;
+    ListViewAdapter listViewAdapter;
     private ClipboardManager clipboardManager;
     private ListViewItem selectedItem;
     private TextView selectedView;
@@ -51,8 +37,7 @@ public class MainActivity extends Activity implements OnKeyListener
     private void setupListView() {
         listView = (ListView) findViewById(R.id.items);
         registerForContextMenu(listView);
-        listViewAdapter = new ArrayAdapter<ListViewItem>(this,
-                android.R.layout.simple_list_item_1);
+        listViewAdapter = new ListViewAdapter(this);
         listView.setAdapter(listViewAdapter);
     }
 
@@ -81,17 +66,13 @@ public class MainActivity extends Activity implements OnKeyListener
 
     public void addItem() {
         String text = editText.getText().toString();
-        text = text.replace('\n', ' ').trim();
-        if (!text.equals("")) {
-            listViewAdapter.add(new ListViewItem(text));
-        }
+        listViewAdapter.add(text);
         editText.setText("");
     }
 
     public void copyText(View view) {
         clipboardManager.setText("Text\nwith\nnewlines");
     }
-
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
@@ -101,10 +82,9 @@ public class MainActivity extends Activity implements OnKeyListener
                 (AdapterView.AdapterContextMenuInfo) menuInfo;
         selectedView = (TextView) info.targetView;
         selectedItem = listViewAdapter.getItem(info.position);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.context_menu, menu);
+        getMenuInflater().inflate(R.menu.context_menu, menu);
     }
-    
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
